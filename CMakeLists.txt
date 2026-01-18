@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(matrix LANGUAGES CXX)
+project(EntropySimulation LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Create an option to switch between a system sdl library and a vendored SDL library
-option(MATRIX_VENDORED "Use vendored libraries" OFF)
+option(EntropySimulation_VENDORED "Use vendored libraries" OFF)
 
-if(MATRIX_VENDORED)
+if(EntropySimulation_VENDORED)
     add_subdirectory(vendored/sdl EXCLUDE_FROM_ALL)
 else()
     # 1. Look for a SDL2 package, 2. look for the SDL2 component and 3. fail if none can be found
@@ -20,7 +20,7 @@ else()
 endif()
 
 
-add_executable(matrix
+add_executable(EntropySimulation
     src/main.cpp
     src/globals.cpp
 
@@ -30,7 +30,7 @@ add_executable(matrix
     src/renderer/renderer.cpp
 )
 
-target_include_directories(matrix
+target_include_directories(EntropySimulation
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
@@ -38,8 +38,8 @@ target_include_directories(matrix
 # SDL2::SDL2main may or may not be available. It is e.g. required by Windows GUI applications
 if(TARGET SDL2::SDL2main)
     # It has an implicit dependency on SDL2 functions, so it MUST be added before SDL2::SDL2 (or SDL2::SDL2-static)
-    target_link_libraries(matrix PRIVATE SDL2::SDL2main)
+    target_link_libraries(EntropySimulation PRIVATE SDL2::SDL2main)
 endif()
 
 # Link to the actual SDL2 library. SDL2::SDL2 is the shared SDL library, SDL2::SDL2-static is the static SDL libarary.
-target_link_libraries(matrix PRIVATE SDL2::SDL2)
+target_link_libraries(EntropySimulation PRIVATE SDL2::SDL2)
