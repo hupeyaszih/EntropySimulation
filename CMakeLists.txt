@@ -19,13 +19,14 @@ else()
     find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
 endif()
 
+
 add_executable(matrix
     src/main.cpp
     src/globals.cpp
 
     src/core/simulation.cpp
     src/core/map.cpp
-    
+
     src/renderer/renderer.cpp
 )
 

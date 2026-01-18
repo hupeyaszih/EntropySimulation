@@ -9,11 +9,13 @@ int main() {
 
     //Init Renderer
     Renderer renderer;
-    renderer.Init();
+    renderer.Init(simulation);
 
-    
+    int simStepsPerFrame = 1;
     while (simulationRunning) {
-        simulation.Update();
+        for(int i = 0;i < simStepsPerFrame;i++) {
+            simulation.Update();
+        }
 
         renderer.Render(simulation);
     }
