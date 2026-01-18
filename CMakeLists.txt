@@ -10,13 +10,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 option(MATRIX_VENDORED "Use vendored libraries" OFF)
 
 if(MATRIX_VENDORED)
-    # This assumes you have added SDL as a submodule in vendored/SDL
-    add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
+    add_subdirectory(vendored/sdl EXCLUDE_FROM_ALL)
 else()
-    # 1. Look for a SDL3 package,
-    # 2. look for the SDL3-shared component, and
-    # 3. fail if the shared component cannot be found.
-    find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
+    # 1. Look for a SDL2 package, 2. look for the SDL2 component and 3. fail if none can be found
+    find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
+
+    # 1. Look for a SDL2 package, 2. Look for the SDL2maincomponent and 3. DO NOT fail when SDL2main is not available
+    find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
 endif()
 
 add_executable(matrix
@@ -24,7 +24,8 @@ add_executable(matrix
     src/globals.cpp
 
     src/core/simulation.cpp
-
+    src/core/map.cpp
+    
     src/renderer/renderer.cpp
 )
 
@@ -33,4 +34,11 @@ target_include_directories(matrix
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries(matrix PRIVATE SDL3::SDL3)
+# SDL2::SDL2main may or may not be available. It is e.g. required by Windows GUI applications
+if(TARGET SDL2::SDL2main)
+    # It has an implicit dependency on SDL2 functions, so it MUST be added before SDL2::SDL2 (or SDL2::SDL2-static)
+    target_link_libraries(matrix PRIVATE SDL2::SDL2main)
+endif()
+
+# Link to the actual SDL2 library. SDL2::SDL2 is the shared SDL library, SDL2::SDL2-static is the static SDL libarary.
+target_link_libraries(matrix PRIVATE SDL2::SDL2)

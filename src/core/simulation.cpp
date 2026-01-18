@@ -7,6 +7,7 @@ Simulation::Simulation() {
 }
 
 void Simulation::Init() {
+    map.Init();
     LOG("Simulation Initialized..");
 }
 

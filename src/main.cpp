@@ -11,10 +11,12 @@ int main() {
     Renderer renderer;
     renderer.Init();
 
-    /*
+    
     while (simulationRunning) {
         simulation.Update();
-    }*/
+
+        renderer.Render(simulation);
+    }
 
     std::cout << "Hello matrix!" << std::endl;
     return 0;

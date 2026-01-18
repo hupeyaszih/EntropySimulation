@@ -5,12 +5,13 @@
 
 #ifdef DEBUG_MODE
 #include <iostream>
-#define LOG(x) std::cout << "[LOG] " << x << std::endl
+#define LOG(x) std::cout << "[LOG] " << x << std::endl;
 #else
 #define LOG(x)
 #endif
 
 
-extern int MAP_SIZE_X, MAP_SIZE_Y;
+#define MAP_SIZE_X 100
+#define MAP_SIZE_Y 100
 
 #endif
