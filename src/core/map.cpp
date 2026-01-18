@@ -1,4 +1,5 @@
 #include "core/map.h"
+
 #include <cstdlib>
 #include <string>
 
@@ -25,13 +26,13 @@ void Map::Init() {
     //////
 
     grid = new Cell[MAP_SIZE_X*MAP_SIZE_Y];
-    objects.resize(MAP_SIZE_X*MAP_SIZE_Y);
+    objects.reserve((MAP_SIZE_X/MAP_DENSITY)*(MAP_SIZE_Y/MAP_DENSITY));
     
     int type = 0;
     int id = 0;
     for(int y = 0;y < MAP_SIZE_Y;y++) {
         for(int x = 0;x < MAP_SIZE_X;x++) {
-            
+            if(x % MAP_DENSITY != 0 || y % MAP_DENSITY != 0) continue;
             OBJECT_TYPE choosenType = OBJECT_TYPE::A;
             switch (type%4) {
                 case 0:
@@ -47,11 +48,15 @@ void Map::Init() {
                     choosenType = OBJECT_TYPE::D;
                     break;
             }
-            
-            objects[y*MAP_SIZE_X+x] = {id,getParameter(choosenType, "mass"),x,y,getParameter(choosenType, "entropyResistance"),1.0f,1.0f,choosenType};
-            getCell(x, y).occupant = &objects[y*MAP_SIZE_X+x];
+            float mass = getParameter(choosenType, "mass");
+            float vx = 0.1f / mass;
+            float vy = 0.1f / mass;
+
+            //objects[y*MAP_SIZE_X+x] = {id,getParameter(choosenType, "mass"),x,y,getParameter(choosenType, "entropyResistance"),vx,vy,choosenType};
+            objects.emplace_back(id,getParameter(choosenType, "mass"),x,y,getParameter(choosenType, "entropyResistance"),vx,vy,choosenType);
+            getCell(x, y).occupant = &objects[id];
             id++;
-            type++;    
+            type=rand();    
         }
     }
     

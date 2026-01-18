@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
-#include <random>
 
 Simulation::Simulation() {
 
@@ -159,6 +158,44 @@ Vector2D Simulation::chooseDirectionFavoringEntropy(const Object& obj) {
     return {obj.x,obj.y};
 }
 
+Vector2D Simulation::chooseDirectionWithProtoGravity(const Object& obj) {
+    std::vector<Vector2D> candidates;
+    float totalMassAround = 0.0f;
+    Vector2D weightedSum = {0,0};
+
+    // 3x3 komşuluk
+    for(int y=-1; y<=1; y++){
+        for(int x=-1; x<=1; x++){
+            if(x==0 && y==0) continue;
+
+            int nx = obj.x + x;
+            int ny = obj.y + y;
+            if(nx<0 || nx>=MAP_SIZE_X || ny<0 || ny>=MAP_SIZE_Y) continue;
+
+            Cell& neighbor = map->getCell(nx, ny);
+            if(neighbor.occupant == nullptr) continue;
+
+            float m = float(neighbor.occupant->mass);
+            totalMassAround += m;
+
+            // Weighted vector pointing toward komşu
+            weightedSum.x += x * m;
+            weightedSum.y += y * m;
+        }
+    }
+
+    // Eğer komşu yoksa hareket yok
+    if(totalMassAround == 0) return {obj.x, obj.y};
+
+    // Yoğunluk merkezine doğru yön
+    Vector2D dir;
+    dir.x = (weightedSum.x > 0) ? 1 : (weightedSum.x < 0 ? -1 : 0);
+    dir.y = (weightedSum.y > 0) ? 1 : (weightedSum.y < 0 ? -1 : 0);
+
+    return {obj.x + dir.x, obj.y + dir.y};
+}
+
+
 void Simulation::Update(){
     for(auto& object : map->objects) {
         float H_max = log(OBJECT_TYPE::COUNT-1);
@@ -170,7 +207,11 @@ void Simulation::Update(){
         orderProb *= (1.f - object.entropyResistance/10.f) / (1.f + object.mass/10.f);
         Vector2D pos = {0,0};
 
-        if((float)rand()/RAND_MAX < orderProb){
+        float protoGravityStrength = 0.5f; // 0 = hiç etkilenmez, 1 = tamamen proto-çekim
+        if((float)rand()/RAND_MAX < protoGravityStrength){
+            pos = chooseDirectionWithProtoGravity(object);
+        }
+        else if((float)rand()/RAND_MAX < orderProb){
             pos = chooseDirectionFavoringOrder(object);
         }else{
             pos = chooseDirectionFavoringEntropy(object);

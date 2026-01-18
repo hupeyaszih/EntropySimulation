@@ -120,6 +120,8 @@ void Renderer::Render(const Simulation& simulation) {
             case OBJECT_TYPE::D:
                 color = {255, 255, 255, 255};
                 break;
+            default:
+                break;
         }
 
         SDL_FRect rect = { (float)object.x, (float)object.y, 1, 1 };

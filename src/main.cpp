@@ -11,7 +11,7 @@ int main() {
     Renderer renderer;
     renderer.Init(simulation);
 
-    int simStepsPerFrame = 10;
+    int simStepsPerFrame = 1;
     while (simulationRunning) {
         for(int i = 0;i < simStepsPerFrame;i++) {
             simulation.Update();

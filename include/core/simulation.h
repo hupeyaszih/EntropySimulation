@@ -20,9 +20,10 @@ public:
     bool canSwap(const Object* o1, const Object* o2) const;
 
     float computeLocalEntropy(const Object& obj,int posX,int posY);
-    
+
     Vector2D chooseDirectionFavoringOrder(const Object& obj); 
     Vector2D chooseDirectionFavoringEntropy(const Object& obj);    
+    Vector2D chooseDirectionWithProtoGravity(const Object& obj);
 };
 
 #endif
