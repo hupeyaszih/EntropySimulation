@@ -19,7 +19,7 @@ struct Object{
     int mass;
     int x,y;
     int entropyResistance;
-
+    float vx,vy; //velocity
     OBJECT_TYPE type;
 };
 

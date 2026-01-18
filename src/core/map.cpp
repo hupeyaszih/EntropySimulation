@@ -11,17 +11,17 @@ Cell& Map::getCell(int x,int y){
 }
 
 void Map::Init() {
-    addParameter(OBJECT_TYPE::A, "mass", 5);
-    addParameter(OBJECT_TYPE::A, "entropyResistance", 5);
+    addParameter(OBJECT_TYPE::A, "mass", 1);
+    addParameter(OBJECT_TYPE::A, "entropyResistance", 1);
 
-    addParameter(OBJECT_TYPE::B, "mass", 1);
-    addParameter(OBJECT_TYPE::B, "entropyResistance", 1);
+    addParameter(OBJECT_TYPE::B, "mass", 3);
+    addParameter(OBJECT_TYPE::B, "entropyResistance", 3);
 
-    addParameter(OBJECT_TYPE::C, "mass", 10);
-    addParameter(OBJECT_TYPE::C, "entropyResistance", 10);
+    addParameter(OBJECT_TYPE::C, "mass", 6);
+    addParameter(OBJECT_TYPE::C, "entropyResistance", 6);
 
-    addParameter(OBJECT_TYPE::D, "mass", 20);
-    addParameter(OBJECT_TYPE::D, "entropyResistance", 20);
+    addParameter(OBJECT_TYPE::D, "mass", 2);
+    addParameter(OBJECT_TYPE::D, "entropyResistance", 0);
     //////
 
     grid = new Cell[MAP_SIZE_X*MAP_SIZE_Y];
@@ -31,7 +31,7 @@ void Map::Init() {
     int id = 0;
     for(int y = 0;y < MAP_SIZE_Y;y++) {
         for(int x = 0;x < MAP_SIZE_X;x++) {
-            type = rand();
+            
             OBJECT_TYPE choosenType = OBJECT_TYPE::A;
             switch (type%4) {
                 case 0:
@@ -48,7 +48,7 @@ void Map::Init() {
                     break;
             }
             
-            objects[y*MAP_SIZE_X+x] = {id,getParameter(choosenType, "mass"),x,y,getParameter(choosenType, "entropyResistance"),choosenType};
+            objects[y*MAP_SIZE_X+x] = {id,getParameter(choosenType, "mass"),x,y,getParameter(choosenType, "entropyResistance"),1.0f,1.0f,choosenType};
             getCell(x, y).occupant = &objects[y*MAP_SIZE_X+x];
             id++;
             type++;    

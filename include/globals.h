@@ -14,4 +14,6 @@
 #define MAP_SIZE_X 100
 #define MAP_SIZE_Y 100
 
+const float ENTROPY_ORDER_THRESHOLD = 0.6f;
+
 #endif
