@@ -22,4 +22,4 @@ This is just a minimal and simple entropy simulation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/microverse.git
+git clone https://github.com/hupeyaszih/EntropySimulation.git
