@@ -95,9 +95,9 @@ Vector2D Simulation::chooseDirection(const Object& obj) {
             moveProb = std::clamp(deltaEntropy / H_max, 0.f, 1.f);
             moveProb *= (1.f - obj.entropyResistance) / (1.f + obj.mass);
             if(entropy > maxEntropy) {
-                if(rand()%1 < moveProb) {
+                if(rand()%2 < moveProb) {
                     maxEntropy = entropy;
-                bestPOS = {obj.x+x,obj.y+y};
+                    bestPOS = {obj.x+x,obj.y+y};
                 }
                 
             }
