@@ -11,6 +11,12 @@ enum OBJECT_TYPE{
     B,
     C,
     D,
+    E,
+    F,
+    G,
+    H,
+    I,
+    K,
     COUNT
 };
 

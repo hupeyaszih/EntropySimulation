@@ -107,22 +107,40 @@ void Renderer::Render(const Simulation& simulation) {
     int i = 0;
     for(auto& object : simulation.map->objects) {
         SDL_Color color;
-        switch (object.type) {
+
+        switch(object.type) {
             case OBJECT_TYPE::A:
-                color = {0, 0, 255, 255};
+                color = {0, 0, 255, 255};      // Mavi
                 break;
             case OBJECT_TYPE::B:
-                color = {0, 255, 0, 255};
+                color = {0, 255, 0, 255};      // Yeşil
                 break;
             case OBJECT_TYPE::C:
-                color = {255, 0, 0, 255};
+                color = {255, 0, 0, 255};      // Kırmızı
                 break;
             case OBJECT_TYPE::D:
-                color = {255, 255, 255, 255};
+                color = {255, 255, 255, 255};  // Beyaz
                 break;
-            default:
+            case OBJECT_TYPE::E:
+                color = {255, 165, 0, 255};    // Turuncu
+                break;
+            case OBJECT_TYPE::F:
+                color = {128, 0, 128, 255};    // Mor
+                break;
+            case OBJECT_TYPE::G:
+                color = {0, 255, 255, 255};    // Camgöbeği
+                break;
+            case OBJECT_TYPE::H:
+                color = {128, 128, 128, 255};  // Gri
+                break;
+            case OBJECT_TYPE::I:
+                color = {255, 192, 203, 255};  // Pembe
+                break;
+            case OBJECT_TYPE::K:
+                color = {255, 255, 0, 255};    // Sarı
                 break;
         }
+
 
         SDL_FRect rect = { (float)object.x, (float)object.y, 1, 1 };
         SDL_FRect drawRect;

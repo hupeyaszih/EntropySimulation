@@ -11,12 +11,12 @@ int main() {
     Renderer renderer;
     renderer.Init(simulation);
 
-    int simStepsPerFrame = 1;
+    int simStepsPerFrame = 100;
     while (simulationRunning) {
         for(int i = 0;i < simStepsPerFrame;i++) {
             simulation.Update();
         }
-
+        
         renderer.Render(simulation);
     }
 

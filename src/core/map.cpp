@@ -15,14 +15,41 @@ void Map::Init() {
     addParameter(OBJECT_TYPE::A, "mass", 1);
     addParameter(OBJECT_TYPE::A, "entropyResistance", 1);
 
-    addParameter(OBJECT_TYPE::B, "mass", 3);
-    addParameter(OBJECT_TYPE::B, "entropyResistance", 3);
+    // Type B → biraz daha ağır, orta direnç
+    addParameter(OBJECT_TYPE::B, "mass", 2);
+    addParameter(OBJECT_TYPE::B, "entropyResistance", 2);
 
-    addParameter(OBJECT_TYPE::C, "mass", 6);
-    addParameter(OBJECT_TYPE::C, "entropyResistance", 6);
+    // Type C → ağır, orta direnç
+    addParameter(OBJECT_TYPE::C, "mass", 4);
+    addParameter(OBJECT_TYPE::C, "entropyResistance", 3);
 
-    addParameter(OBJECT_TYPE::D, "mass", 2);
-    addParameter(OBJECT_TYPE::D, "entropyResistance", 0);
+    // Type D → hafif, yüksek direnç
+    addParameter(OBJECT_TYPE::D, "mass", 1);
+    addParameter(OBJECT_TYPE::D, "entropyResistance", 6);
+
+    // Type E → orta ağırlık, düşük direnç
+    addParameter(OBJECT_TYPE::E, "mass", 3);
+    addParameter(OBJECT_TYPE::E, "entropyResistance", 1);
+
+    // Type F → orta ağırlık, yüksek direnç
+    addParameter(OBJECT_TYPE::F, "mass", 3);
+    addParameter(OBJECT_TYPE::F, "entropyResistance", 7);
+
+    // Type G → çok hafif, düşük direnç
+    addParameter(OBJECT_TYPE::G, "mass", 1);
+    addParameter(OBJECT_TYPE::G, "entropyResistance", 0);
+
+    // Type H → çok ağır, orta direnç
+    addParameter(OBJECT_TYPE::H, "mass", 6);
+    addParameter(OBJECT_TYPE::H, "entropyResistance", 4);
+
+    // Type I → hafif, orta direnç
+    addParameter(OBJECT_TYPE::I, "mass", 2);
+    addParameter(OBJECT_TYPE::I, "entropyResistance", 3);
+
+    // Type J → ağır, yüksek direnç
+    addParameter(OBJECT_TYPE::K, "mass", 5);
+    addParameter(OBJECT_TYPE::K, "entropyResistance", 8);
     //////
 
     grid = new Cell[MAP_SIZE_X*MAP_SIZE_Y];
@@ -33,21 +60,8 @@ void Map::Init() {
     for(int y = 0;y < MAP_SIZE_Y;y++) {
         for(int x = 0;x < MAP_SIZE_X;x++) {
             if(x % MAP_DENSITY != 0 || y % MAP_DENSITY != 0) continue;
-            OBJECT_TYPE choosenType = OBJECT_TYPE::A;
-            switch (type%4) {
-                case 0:
-                    choosenType = OBJECT_TYPE::A;
-                    break;
-                case 1:
-                    choosenType = OBJECT_TYPE::B;
-                    break;
-                case 2 :
-                    choosenType = OBJECT_TYPE::C;
-                    break;
-                case 3:
-                    choosenType = OBJECT_TYPE::D;
-                    break;
-            }
+            type = x % 10;
+            OBJECT_TYPE choosenType = (OBJECT_TYPE) (type % 10);
             float mass = getParameter(choosenType, "mass");
             float vx = 0.1f / mass;
             float vy = 0.1f / mass;
@@ -56,7 +70,7 @@ void Map::Init() {
             objects.emplace_back(id,getParameter(choosenType, "mass"),x,y,getParameter(choosenType, "entropyResistance"),vx,vy,choosenType);
             getCell(x, y).occupant = &objects[id];
             id++;
-            type=rand();    
+             
         }
     }
     
