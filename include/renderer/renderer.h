@@ -39,7 +39,7 @@ private:
     SDL_Window* sdl_window = NULL;
     SDL_Renderer* sdl_renderer = NULL;
     Camera camera;
-    std::map<int, bool> keyboard; // Saves the state(true=pressed; false=released) of each SDL_Key.
+    std::map<int, bool> keyboard;
    
     std::vector<int> indices;
     std::vector<SDL_Vertex> vertices;
