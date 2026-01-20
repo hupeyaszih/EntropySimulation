@@ -20,6 +20,5 @@ int main() {
         renderer.Render(simulation);
     }
 
-    std::cout << "Hello matrix!" << std::endl;
     return 0;
 }
