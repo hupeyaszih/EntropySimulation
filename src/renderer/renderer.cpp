@@ -59,7 +59,7 @@ void Renderer::Render(const Simulation& simulation) {
     SDL_Event event;
     
     while(SDL_PollEvent(&event)) {
-        // Determine zoom direction
+
         float zoomStep = 1.1f;
         float oldScale = camera.zoom;
         switch (event.type) {
@@ -75,11 +75,10 @@ void Renderer::Render(const Simulation& simulation) {
             case SDL_MOUSEWHEEL:
                 int mouseX, mouseY;
                 SDL_GetMouseState(&mouseX, &mouseY);
-                if (event.wheel.y > 0) camera.zoom *= zoomStep; // Zoom In
-                else if (event.wheel.y < 0) camera.zoom /= zoomStep; // Zoom Out
+                if (event.wheel.y > 0) camera.zoom *= zoomStep;
+                else if (event.wheel.y < 0) camera.zoom /= zoomStep;
                 camera.zoom = std::clamp(camera.zoom,1.0f,10.0f);
-                // Adjust offset to zoom toward mouse position
-                // Formula: new_offset = mouse_pos - (mouse_pos - old_offset) * (new_scale / old_scale)
+
                 camera.x = mouseX - (mouseX - camera.x) * (camera.zoom / oldScale);
                 camera.y = mouseY - (mouseY - camera.y) * (camera.zoom / oldScale);
                 break;
@@ -110,34 +109,34 @@ void Renderer::Render(const Simulation& simulation) {
 
         switch(object.type) {
             case OBJECT_TYPE::A:
-                color = {0, 0, 255, 255};      // Mavi
+                color = {0, 0, 255, 255};      
                 break;
             case OBJECT_TYPE::B:
-                color = {0, 255, 0, 255};      // Yeşil
+                color = {0, 255, 0, 255};      
                 break;
             case OBJECT_TYPE::C:
-                color = {255, 0, 0, 255};      // Kırmızı
+                color = {255, 0, 0, 255};      
                 break;
             case OBJECT_TYPE::D:
-                color = {255, 255, 255, 255};  // Beyaz
+                color = {255, 255, 255, 255};  
                 break;
             case OBJECT_TYPE::E:
-                color = {255, 165, 0, 255};    // Turuncu
+                color = {255, 165, 0, 255};    
                 break;
             case OBJECT_TYPE::F:
-                color = {128, 0, 128, 255};    // Mor
+                color = {128, 0, 128, 255};    
                 break;
             case OBJECT_TYPE::G:
-                color = {0, 255, 255, 255};    // Camgöbeği
+                color = {0, 255, 255, 255};   
                 break;
             case OBJECT_TYPE::H:
-                color = {128, 128, 128, 255};  // Gri
+                color = {128, 128, 128, 255}; 
                 break;
             case OBJECT_TYPE::I:
-                color = {255, 192, 203, 255};  // Pembe
+                color = {255, 192, 203, 255}; 
                 break;
             case OBJECT_TYPE::K:
-                color = {255, 255, 0, 255};    // Sarı
+                color = {255, 255, 0, 255}; 
                 break;
         }
 
@@ -150,10 +149,10 @@ void Renderer::Render(const Simulation& simulation) {
         drawRect.y = (rect.y * camera.zoom) + camera.y;
 
         int v = i * 4;
-        vertices[v + 0] = (SDL_Vertex){{drawRect.x, drawRect.y},     color, {0,0}}; // Sol Üst
-        vertices[v + 1] = (SDL_Vertex){{drawRect.x+drawRect.w, drawRect.y},   color, {0,0}}; // Sağ Üst
-        vertices[v + 2] = (SDL_Vertex){{drawRect.x+drawRect.w, drawRect.y+drawRect.h}, color, {0,0}}; // Sağ Alt
-        vertices[v + 3] = (SDL_Vertex){{drawRect.x, drawRect.y+drawRect.h},   color, {0,0}}; // Sol Alt
+        vertices[v + 0] = (SDL_Vertex){{drawRect.x, drawRect.y},     color, {0,0}}; 
+        vertices[v + 1] = (SDL_Vertex){{drawRect.x+drawRect.w, drawRect.y},   color, {0,0}};
+        vertices[v + 2] = (SDL_Vertex){{drawRect.x+drawRect.w, drawRect.y+drawRect.h}, color, {0,0}};
+        vertices[v + 3] = (SDL_Vertex){{drawRect.x, drawRect.y+drawRect.h},   color, {0,0}};
 
         int ind = i * 6; 
         indices[ind + 0] = v + 0;
@@ -165,17 +164,15 @@ void Renderer::Render(const Simulation& simulation) {
 
         i++;
     }
-    //SDL_RenderFillRectsF(sdl_renderer,rects,i);
+
     SDL_RenderGeometry(sdl_renderer, NULL, vertices.data(), vertices.size(), indices.data(), indices.size());
     //Present Scene
     SDL_RenderPresent(sdl_renderer);
 
     //DELAY
-    //SDL_Delay(100);
-   
 
     while((fps_cap_timer.get_time() + extra_time) < SCREEN_TICKS_PER_FRAME) {
-        SDL_Delay(1); // I am aware of the issues with delay on different platforms / OS scheduling
+        SDL_Delay(1); 
     }
     Uint32 frameTime = SDL_GetTicks() - frameStart;
     if (fps_cap_timer.get_time() < (SCREEN_TICKS_PER_FRAME)) {
