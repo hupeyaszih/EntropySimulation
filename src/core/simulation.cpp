@@ -44,18 +44,13 @@ void Simulation::move(Object& object, int dirX,int dirY){
 }
 
 bool Simulation::canSwap(const Object* o1, const Object* o2) const {
-    // 1. Direnç kontrolü
     if(o1->entropyResistance > 7 || o2->entropyResistance > 7)
-        return false;  // çok dirençli, swap yapmaz
+        return false;
 
-    // 2. Mass kontrolü
     if(o1->mass > o2->mass + 5)
-        return false;  // aşırı ağır, swap edemez
+        return false;
 
-    // 3. Opsiyonel: sadece aynı tipler swap edebilir
-    // if(o1->type != o2->type) return false;
-
-    return true; // diğer durumlarda swap mümkün
+    return true;
 }
 
 
@@ -108,7 +103,6 @@ Vector2D Simulation::chooseDirectionFavoringOrder(const Object& obj) {
             float entropy = computeLocalEntropy(obj, nx, ny);
             float deltaH = entropy - currentEntropy;
 
-            // Bu sefer deltaH < 0 → entropiyi azaltacak yönler daha cazip
             float moveProb = std::clamp(-deltaH / H_max, 0.f, 1.f);
             moveProb *= (1.f - obj.entropyResistance/10.f) / (1.f + obj.mass/10.f);
 
@@ -122,7 +116,7 @@ Vector2D Simulation::chooseDirectionFavoringOrder(const Object& obj) {
         return candidates[rand() % candidates.size()];
     }
 
-    return {obj.x, obj.y}; // hareket yok
+    return {obj.x, obj.y};
 }
 
 
@@ -150,7 +144,7 @@ Vector2D Simulation::chooseDirectionFavoringEntropy(const Object& obj) {
             }
         }   
     }
-    // candidate varsa rastgele birini seç
+
     if(!candidates.empty()){
         Vector2D chosen = candidates[rand()%candidates.size()];
         return chosen;
@@ -163,7 +157,7 @@ Vector2D Simulation::chooseDirectionWithProtoGravity(const Object& obj) {
     float totalMassAround = 0.0f;
     Vector2D weightedSum = {0,0};
 
-    // 3x3 komşuluk
+   
     for(int y=-1; y<=1; y++){
         for(int x=-1; x<=1; x++){
             if(x==0 && y==0) continue;
@@ -184,10 +178,10 @@ Vector2D Simulation::chooseDirectionWithProtoGravity(const Object& obj) {
         }
     }
 
-    // Eğer komşu yoksa hareket yok
+
     if(totalMassAround == 0) return {obj.x, obj.y};
 
-    // Yoğunluk merkezine doğru yön
+
     Vector2D dir;
     dir.x = (weightedSum.x > 0) ? 1 : (weightedSum.x < 0 ? -1 : 0);
     dir.y = (weightedSum.y > 0) ? 1 : (weightedSum.y < 0 ? -1 : 0);
@@ -202,12 +196,12 @@ void Simulation::Update(){
         float currentEntropy = computeLocalEntropy(object, object.x, object.y);
         float normalizedEntropy = currentEntropy/H_max;
         float orderProb = std::clamp((normalizedEntropy - ENTROPY_ORDER_THRESHOLD) / (1 - ENTROPY_ORDER_THRESHOLD), 0.f, 1.f);
-        //float orderProb = std::clamp((normalizedEntropy - ENTROPY_ORDER_THRESHOLD) / (1 - ENTROPY_ORDER_THRESHOLD), 0.f, 1.f);
+
 
         orderProb *= (1.f - object.entropyResistance/10.f) / (1.f + object.mass/10.f);
         Vector2D pos = {0,0};
 
-        float protoGravityStrength = 0.5f; // 0 = hiç etkilenmez, 1 = tamamen proto-çekim
+        float protoGravityStrength = 0.5f; 
         if((float)rand()/RAND_MAX < protoGravityStrength){
             pos = chooseDirectionWithProtoGravity(object);
         }
@@ -218,11 +212,10 @@ void Simulation::Update(){
         }
         int dx = pos.x - object.x;
         int dy = pos.y - object.y;
-        float alpha = 0.8f; // önceki hareketin ağırlığı
+        float alpha = 0.8f;
         object.vx = alpha * object.vx + (1 - alpha) * dx;
         object.vy = alpha * object.vy + (1 - alpha) * dy;
 
-        // Sonra integera çevirip move et
         int moveX = round(object.vx);
         int moveY = round(object.vy);
         move(object, round(moveX), round(moveY));
